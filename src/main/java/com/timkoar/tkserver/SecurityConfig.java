@@ -27,11 +27,10 @@ public class SecurityConfig {
                         .addHeaderWriter(new StaticHeadersWriter("X-Content-Type-Options", "nosniff"))
                         .addHeaderWriter(new StaticHeadersWriter("Strict-Transport-Security", "max-age=31536000; includeSubDomains"))
                 )
-                .authorizeHttpRequests(authorize -> {
-                    authorize
-                        .requestMatchers("/api/**").permitAll() // Allow access to /api/contact
-                        .anyRequest().authenticated();
-                })
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/","/**", "/api/**", "/index.html", "/static/**", "/*.js", "/*.css", "/*.png", "/*.jpg").permitAll() // Allow access to root, API, and static files
+                        .anyRequest().authenticated() // All other requests require authentication
+                )
                 .httpBasic().disable() // Disable HTTP Basic authentication to prevent login prompts
                 .formLogin().disable() // Disable form-based authentication to prevent login prompts
                 .cors().and();
@@ -41,10 +40,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowedOrigins(List.of("https://timkoar.com", "https://www.timkoar.com"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(
-                List.of("Content-Type", "x-xsrf-token", "Authorization", "X-Content-Type-Options","X-Frame-Options",
+                List.of("Content-Type", "x-xsrf-token", "Authorization", "X-Content-Type-Options", "X-Frame-Options",
                         "X-XSS-Protection", "Strict-Transport-Security"));
         configuration.setAllowCredentials(true);
 
