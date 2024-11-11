@@ -28,7 +28,7 @@ public class SecurityConfig {
                         .addHeaderWriter(new StaticHeadersWriter("Strict-Transport-Security", "max-age=31536000; includeSubDomains"))
                 )
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/","/**", "/api/**", "/index.html", "/static/**", "/*.js", "/*.css", "/*.png", "/*.jpg").permitAll() // Allow access to root, API, and static files
+                        .requestMatchers("/","/**", "/api/**", "/api/blog/**", "/index.html", "/static/**", "/*.js", "/*.css", "/*.png", "/*.jpg").permitAll() // Allow access to root, API, and static files
                         .anyRequest().authenticated() // All other requests require authentication
                 )
                 .httpBasic().disable() // Disable HTTP Basic authentication to prevent login prompts
