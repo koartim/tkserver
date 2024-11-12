@@ -26,7 +26,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/contact")
 @Validated
-@CrossOrigin(origins = "http://localhost:3000")
 public class ContactController {
 
     private static final Logger logger = LoggerFactory.getLogger(ContactController.class);
@@ -37,6 +36,7 @@ public class ContactController {
 
     @Value("${spring.mail.username}")
     private String recipientEmail;
+
     public ContactController(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
@@ -44,6 +44,7 @@ public class ContactController {
     @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity<?> sendContactEmail(
             @RequestPart("name") @NotEmpty String name,
+            @RequestPart("email") @NotEmpty String email,
             @RequestPart("message") @NotEmpty @Size(max = 255) String message,
             @RequestPart(value = "file", required = false) MultipartFile file) {
 
@@ -67,6 +68,8 @@ public class ContactController {
             helper.setTo(recipientEmail);
             helper.setSubject(sanitizedSubject);
             helper.setText(sanitizedMessage);
+            // Set the "Reply-To" header to the user's email address
+            helper.setReplyTo(email);
 
             if (file != null && !file.isEmpty()) {
                 helper.addAttachment(file.getOriginalFilename(), file);

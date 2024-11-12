@@ -10,12 +10,12 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
-
 @Configuration
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors().and()
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 )
@@ -28,23 +28,23 @@ public class SecurityConfig {
                         .addHeaderWriter(new StaticHeadersWriter("Strict-Transport-Security", "max-age=31536000; includeSubDomains"))
                 )
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/","/**", "/api/**", "/api/blog/**", "/index.html", "/static/**", "/*.js", "/*.css", "/*.png", "/*.jpg").permitAll() // Allow access to root, API, and static files
+                        .requestMatchers("/","/**", "/api/**", "/index.html", "/static/**", "/*.js", "/*.css", "/*.png", "/*.jpg").permitAll() // Allow access to root, API, and static files
                         .anyRequest().authenticated() // All other requests require authentication
                 )
                 .httpBasic().disable() // Disable HTTP Basic authentication to prevent login prompts
-                .formLogin().disable() // Disable form-based authentication to prevent login prompts
-                .cors().and();
+                .formLogin().disable(); // Disable form-based authentication to prevent login prompts
         return http.build();
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("https://timkoar.com", "https://www.timkoar.com"));
+        configuration.setAllowedOrigins(List.of("https://timkoar.com", "https://www.timkoar.com", "http://localhost:3000"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(
-                List.of("Content-Type", "x-xsrf-token", "Authorization", "X-Content-Type-Options", "X-Frame-Options",
+                List.of("Content-Type", "X-XSRF-TOKEN", "Authorization", "X-Content-Type-Options", "X-Frame-Options",
                         "X-XSS-Protection", "Strict-Transport-Security"));
+        configuration.setExposedHeaders(List.of("X-XSRF-TOKEN"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

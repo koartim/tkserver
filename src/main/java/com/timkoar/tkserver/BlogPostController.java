@@ -7,6 +7,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/blogs")
+@CrossOrigin(origins = {"http://localhost:3000", "https://timkoar.com", "https://www.timkoar.com"})
 public class BlogPostController {
 
     private final BlogPostService blogPostService;
