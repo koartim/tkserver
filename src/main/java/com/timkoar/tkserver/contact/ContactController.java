@@ -1,4 +1,4 @@
-package com.timkoar.tkserver;
+package com.timkoar.tkserver.contact;
 
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;

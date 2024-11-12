@@ -1,4 +1,4 @@
-package com.timkoar.tkserver;
+package com.timkoar.tkserver.contact;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

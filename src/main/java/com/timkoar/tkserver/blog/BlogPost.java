@@ -1,4 +1,4 @@
-package com.timkoar.tkserver;
+package com.timkoar.tkserver.blog;
 
 import jakarta.persistence.*;
 

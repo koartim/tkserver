@@ -1,4 +1,4 @@
-package com.timkoar.tkserver;
+package com.timkoar.tkserver.contact;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

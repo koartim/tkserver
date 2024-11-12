@@ -1,4 +1,4 @@
-package com.timkoar.tkserver;
+package com.timkoar.tkserver.csrf;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
