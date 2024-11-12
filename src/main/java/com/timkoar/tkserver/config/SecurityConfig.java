@@ -39,7 +39,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("https://timkoar.com", "https://www.timkoar.com", "http://localhost:3000"));
+//        configuration.setAllowedOrigins(List.of("https://timkoar.com", "https://www.timkoar.com", "http://localhost:3000"));
+                configuration.setAllowedOrigins(List.of("https://timkoar.com", "https://www.timkoar.com"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(
                 List.of("Content-Type", "X-XSRF-TOKEN", "Authorization", "X-Content-Type-Options", "X-Frame-Options",
