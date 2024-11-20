@@ -1,5 +1,7 @@
-package com.timkoar.tkserver.blog;
+package com.timkoar.tkserver.service;
 
+import com.timkoar.tkserver.model.blog.BlogPost;
+import com.timkoar.tkserver.repository.BlogPostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;

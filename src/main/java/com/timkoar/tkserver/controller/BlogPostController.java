@@ -1,5 +1,7 @@
-package com.timkoar.tkserver.blog;
+package com.timkoar.tkserver.controller;
 
+import com.timkoar.tkserver.model.blog.BlogPost;
+import com.timkoar.tkserver.service.BlogPostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;

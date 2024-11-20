@@ -1,4 +1,4 @@
-package com.timkoar.tkserver.contact;
+package com.timkoar.tkserver.controller;
 
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
@@ -34,8 +34,16 @@ public class ContactController {
             .addLimit(Bandwidth.classic(10, Refill.greedy(10, Duration.ofMinutes(1))))
             .build();
 
+    @Value("${APP_EMAIL}")
+    private String appEmail;
+
+    @Value("${APP_PASSWORD}")
+    private String appPassword;
+
     @Value("${spring.mail.username}")
     private String recipientEmail;
+
+
 
     public ContactController(JavaMailSender mailSender) {
         this.mailSender = mailSender;
