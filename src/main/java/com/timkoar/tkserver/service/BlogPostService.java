@@ -12,28 +12,22 @@ import java.util.Optional;
 
 @Service
 public class BlogPostService {
+    private final BlogPostRepository blogPostRepository;
 
-    @Autowired
-    private BlogPostRepository blogPostRepository;
-
-    private static final Logger logger = LoggerFactory.getLogger(BlogPostService.class);
+    public BlogPostService(BlogPostRepository blogPostRepository) {
+        this.blogPostRepository = blogPostRepository;
+    }
 
     public List<BlogPost> getAllPosts() {
-        logger.info("Fetching all blog posts...");
-        List<BlogPost> posts = blogPostRepository.findAll();
-        logger.info("Number of posts retrieved: " + posts.size());
-        return posts;
+        return blogPostRepository.findAllByOrderByCreatedDesc();
     }
 
-    public Optional<BlogPost> getPostById(Long id) {
-        return blogPostRepository.findById(id);
+    public BlogPost getPostById(Long id) {
+        return blogPostRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " not found"));
     }
 
-    public BlogPost createPost(BlogPost post) {
-        return blogPostRepository.save(post);
-    }
-
-    public void deletePost(Long id) {
-        blogPostRepository.deleteById(id);
+    public BlogPost savePost(BlogPost blogPost) {
+        return blogPostRepository.save(blogPost);
     }
 }

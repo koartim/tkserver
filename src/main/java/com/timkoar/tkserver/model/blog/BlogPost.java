@@ -2,8 +2,10 @@ package com.timkoar.tkserver.model.blog;
 
 import com.timkoar.tkserver.model.user.User;
 import jakarta.persistence.*;
+import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Entity
 @Table(name="blogpost")
