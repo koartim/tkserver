@@ -47,7 +47,7 @@ public class Comment {
         return blogPost;
     }
 
-    public void setBlogPost(BlogPost post) {
+    public void setBlogPost(BlogPost blogPost) {
         this.blogPost = blogPost;
     }
 

@@ -1,10 +1,13 @@
 package com.timkoar.tkserver.model.blog;
 
+import com.timkoar.tkserver.model.blog.comment.Comment;
 import com.timkoar.tkserver.model.user.User;
 import jakarta.persistence.*;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Entity
@@ -26,15 +29,19 @@ public class BlogPost {
 
     private LocalDateTime created = LocalDateTime.now();
 
+    @OneToMany(mappedBy = "blogPost", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     public BlogPost() {
+
     }
 
-    public BlogPost(Long id, String title, String content, LocalDateTime created, User author) {
+    public BlogPost(Long id, String title, String content, LocalDateTime created, User author, List<Comment> comments) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.created = created;
+        this.comments = comments;
         this.author = author;
     }
 
@@ -78,6 +85,24 @@ public class BlogPost {
         this.content = content;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.setBlogPost(this); // Set the bidirectional relationship
+    }
+
+    public void removeComment(Comment comment) {
+        comments.remove(comment);
+        comment.setBlogPost(null); // Break the bidirectional relationship
+    }
+
     @Override
     public String toString() {
         return "BlogPost{" +
@@ -85,6 +110,7 @@ public class BlogPost {
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 ", author=" + author + '\'' +
+                ", comments=" + comments + '\'' +
                 ", created=" + created +
                 '}';
     }

@@ -18,7 +18,7 @@ public class CommentService {
         return commentRepository.findByBlogPost_IdOrderByCreatedDateDesc(postId);
     }
 
-    public Comment saveComment(Comment comment) {
-        return commentRepository.save(comment);
+    public Comment getCommentById(Long id) {
+        return commentRepository.findById(id).orElse(null);
     }
 }

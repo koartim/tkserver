@@ -1,6 +1,7 @@
 package com.timkoar.tkserver.controller;
 
-import com.timkoar.tkserver.DTO.BlogPostRequest;
+import com.timkoar.tkserver.dto.BlogPostRequest;
+import com.timkoar.tkserver.mapper.BlogPostMapper;
 import com.timkoar.tkserver.model.blog.BlogPost;
 import com.timkoar.tkserver.model.user.User;
 import com.timkoar.tkserver.service.BlogPostService;
@@ -8,8 +9,8 @@ import com.timkoar.tkserver.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/blog")
@@ -24,35 +25,30 @@ public class BlogPostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BlogPost>> getBlogPosts() {
-        return ResponseEntity.ok(blogPostService.getAllPosts());
+    public ResponseEntity<List<BlogPostRequest>> getBlogPosts() {
+        List<BlogPostRequest> posts = blogPostService.getAllPosts()
+                .stream()
+                .map(BlogPostMapper::toDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(posts);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BlogPost> getBlogPost(@PathVariable long id) {
-        try {
-            return ResponseEntity.ok(blogPostService.getPostById(id));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    public ResponseEntity<BlogPostRequest> getBlogPostById(@PathVariable long id) {
+        BlogPost post = blogPostService.getPostById(id);
+        BlogPostRequest response = BlogPostMapper.toDTO(post);
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<BlogPost> createPost(@RequestBody BlogPostRequest blogPostRequest) {
-        // restricted to users with admin role
-        try {
-            User author = userService.findById(blogPostRequest.getAuthorId())
-                    .orElseThrow(() -> new IllegalArgumentException("Author not found"));
+    public ResponseEntity<BlogPostRequest> createPost(@RequestBody BlogPostRequest blogPostRequest) {
+        User author = userService.findById(blogPostRequest.getAuthorId())
+                .orElseThrow(() -> new IllegalArgumentException("Author not found"));
+        BlogPost blogPost = BlogPostMapper.toEntity(blogPostRequest, author);
+        BlogPost savedPost = blogPostService.savePost(blogPost);
+        BlogPostRequest response = BlogPostMapper.toDTO(savedPost);
 
-            BlogPost blogPost = new BlogPost();
-            blogPost.setTitle(blogPostRequest.getTitle());
-            blogPost.setContent(blogPostRequest.getContent());
-            blogPost.setAuthor(author);
-            BlogPost newPost = blogPostService.savePost(blogPost);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(newPost);
-        } catch(IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }
