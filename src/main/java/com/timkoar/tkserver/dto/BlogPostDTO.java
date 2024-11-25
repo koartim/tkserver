@@ -2,7 +2,7 @@ package com.timkoar.tkserver.dto;
 
 import java.util.List;
 
-public class BlogPostRequest {
+public class BlogPostDTO {
 
     private Long id;
     private String title;
@@ -10,7 +10,6 @@ public class BlogPostRequest {
     private String createdDate;
     private Long authorId;
     private String authorName;
-    private List<CommentRequest> comments;
 
     public Long getId() {
         return id;
@@ -36,16 +35,16 @@ public class BlogPostRequest {
         this.content = content;
     }
 
-    public String getCreatedDate() {
-        return createdDate;
-    }
-
     public Long getAuthorId() {
         return authorId;
     }
 
     public void setAuthorId(Long authorId) {
         this.authorId = authorId;
+    }
+
+    public String getCreatedDate() {
+        return createdDate;
     }
 
     public void setCreatedDate(String createdDate) {
@@ -60,11 +59,15 @@ public class BlogPostRequest {
         this.authorName = authorName;
     }
 
-    public List<CommentRequest> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<CommentRequest> comments) {
-        this.comments = comments;
+    @Override
+    public String toString() {
+        return "BlogPostDTO{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", createdDate='" + createdDate + '\'' +
+                ", authorId=" + authorId +
+                ", authorName='" + authorName + '\'' +
+                '}';
     }
 }

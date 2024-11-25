@@ -1,36 +1,32 @@
 package com.timkoar.tkserver.mapper;
 
-import com.timkoar.tkserver.dto.BlogPostRequest;
+import com.timkoar.tkserver.dto.BlogPostDTO;
 import com.timkoar.tkserver.model.blog.BlogPost;
-import com.timkoar.tkserver.model.user.User;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.stream.Collectors;
 
 public class BlogPostMapper {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public static BlogPostRequest toDTO(BlogPost blogPost) {
-        BlogPostRequest blogPostRequest = new BlogPostRequest();
-        blogPostRequest.setId(blogPost.getId());
-        blogPostRequest.setTitle(blogPost.getTitle());
-        blogPostRequest.setContent(blogPost.getContent());
-        blogPostRequest.setAuthorId(blogPost.getAuthor().getId());
-        blogPostRequest.setAuthorName(blogPost.getAuthor().getUsername());
-        blogPostRequest.setComments(blogPost.getComments().stream()
-                .map(CommentMapper::toDTO).collect(Collectors.toList()));
-        return blogPostRequest;
+    public static BlogPostDTO toDTO(BlogPost blogPost) {
+        BlogPostDTO blogPostDTO = new BlogPostDTO();
+        blogPostDTO.setId(blogPost.getId());
+        blogPostDTO.setTitle(blogPost.getTitle());
+        blogPostDTO.setContent(blogPost.getContent());
+        blogPostDTO.setAuthorId(blogPost.getAuthorId());
+        blogPostDTO.setAuthorName(blogPost.getAuthorName());
+        blogPostDTO.setCreatedDate(blogPost.getCreatedDate().format(formatter));
+        return blogPostDTO;
     }
 
-    public static BlogPost toEntity(BlogPostRequest blogPostRequest, User author) {
+    public static BlogPost toEntity(BlogPostDTO blogPostDTO) {
         BlogPost blogPost = new BlogPost();
-        blogPost.setId(blogPostRequest.getId());
-        blogPost.setTitle(blogPostRequest.getTitle());
-        blogPost.setContent(blogPostRequest.getContent());
-        blogPost.setAuthor(author);
-        blogPost.setCreated(LocalDateTime.now());
+        blogPost.setTitle(blogPostDTO.getTitle());
+        blogPost.setContent(blogPostDTO.getContent());
+        blogPost.setAuthorId(blogPostDTO.getAuthorId());
+        blogPost.setAuthorName(blogPostDTO.getAuthorName());
+        blogPost.setCreatedDate(LocalDateTime.now());
         return blogPost;
     }
 }

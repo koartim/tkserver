@@ -1,9 +1,8 @@
 package com.timkoar.tkserver.controller;
 
-import com.timkoar.tkserver.dto.BlogPostRequest;
+import com.timkoar.tkserver.dto.BlogPostDTO;
 import com.timkoar.tkserver.mapper.BlogPostMapper;
 import com.timkoar.tkserver.model.blog.BlogPost;
-import com.timkoar.tkserver.model.user.User;
 import com.timkoar.tkserver.service.BlogPostService;
 import com.timkoar.tkserver.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -25,8 +24,8 @@ public class BlogPostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BlogPostRequest>> getBlogPosts() {
-        List<BlogPostRequest> posts = blogPostService.getAllPosts()
+    public ResponseEntity<List<BlogPostDTO>> getBlogPosts() {
+        List<BlogPostDTO> posts = blogPostService.getAllPosts()
                 .stream()
                 .map(BlogPostMapper::toDTO)
                 .collect(Collectors.toList());
@@ -34,21 +33,24 @@ public class BlogPostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BlogPostRequest> getBlogPostById(@PathVariable long id) {
+    public ResponseEntity<BlogPostDTO> getBlogPostById(@PathVariable long id) {
         BlogPost post = blogPostService.getPostById(id);
-        BlogPostRequest response = BlogPostMapper.toDTO(post);
+        BlogPostDTO response = BlogPostMapper.toDTO(post);
 
         return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<BlogPostRequest> createPost(@RequestBody BlogPostRequest blogPostRequest) {
-        User author = userService.findById(blogPostRequest.getAuthorId())
-                .orElseThrow(() -> new IllegalArgumentException("Author not found"));
-        BlogPost blogPost = BlogPostMapper.toEntity(blogPostRequest, author);
+    public ResponseEntity<BlogPostDTO> createPost(@RequestBody BlogPostDTO blogPostDTO) {
+        BlogPost blogPost = BlogPostMapper.toEntity(blogPostDTO);
         BlogPost savedPost = blogPostService.savePost(blogPost);
-        BlogPostRequest response = BlogPostMapper.toDTO(savedPost);
-
+        BlogPostDTO response = BlogPostMapper.toDTO(savedPost);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
+        blogPostService.deletePost(postId);
+        return ResponseEntity.noContent().build();
     }
 }

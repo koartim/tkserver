@@ -1,12 +1,13 @@
 package com.timkoar.tkserver.dto;
 
-public class CommentRequest {
+public class CommentDTO {
 
     private Long id;
     private String content;
     private String createdDate;
-    private Long userId;
     private String username;
+    private Long userId;
+    private Long postId;
 
     public Long getId() {
         return id;
@@ -22,6 +23,14 @@ public class CommentRequest {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getCreatedDate() {
@@ -40,11 +49,23 @@ public class CommentRequest {
         this.userId = userId;
     }
 
-    public String getUsername() {
-        return username;
+    public Long getPostId() {
+        return postId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setPostId(Long postId) {
+        this.postId = postId;
+    }
+
+    @Override
+    public String toString() {
+        return "CommentDTO{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", createdDate='" + createdDate + '\'' +
+                ", username='" + username + '\'' +
+                ", userId=" + userId +
+                ", postId=" + postId +
+                '}';
     }
 }

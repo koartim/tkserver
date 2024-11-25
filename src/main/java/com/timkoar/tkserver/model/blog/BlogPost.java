@@ -23,26 +23,24 @@ public class BlogPost {
     @Column(nullable=false, columnDefinition = "TEXT")
     private String content;
 
-    @ManyToOne
-    @JoinColumn(name = "author_id", nullable = false)
-    private User author;
+    @Column(nullable = false)
+    private Long authorId;
 
-    private LocalDateTime created = LocalDateTime.now();
+    @Column(nullable = false)
+    private String authorName;
 
-    @OneToMany(mappedBy = "blogPost", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+    private LocalDateTime createdDate = LocalDateTime.now();
 
     public BlogPost() {
-
     }
 
-    public BlogPost(Long id, String title, String content, LocalDateTime created, User author, List<Comment> comments) {
+    public BlogPost(Long id, String title, String content, LocalDateTime createdDate, Long authorId, String authorName) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.created = created;
-        this.comments = comments;
-        this.author = author;
+        this.createdDate = createdDate;
+        this.authorName = authorName;
+        this.authorId = authorId;
     }
 
     public Long getId() {
@@ -61,20 +59,28 @@ public class BlogPost {
         this.title = title;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
     }
 
-    public User getAuthor() {
-        return author;
+    public Long getAuthorId() {
+        return authorId;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
     }
 
     public String getContent() {
@@ -85,33 +91,15 @@ public class BlogPost {
         this.content = content;
     }
 
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public void addComment(Comment comment) {
-        comments.add(comment);
-        comment.setBlogPost(this); // Set the bidirectional relationship
-    }
-
-    public void removeComment(Comment comment) {
-        comments.remove(comment);
-        comment.setBlogPost(null); // Break the bidirectional relationship
-    }
-
     @Override
     public String toString() {
         return "BlogPost{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
-                ", author=" + author + '\'' +
-                ", comments=" + comments + '\'' +
-                ", created=" + created +
+                ", authorId=" + authorId +
+                ", authorName='" + authorName + '\'' +
+                ", createdDate=" + createdDate +
                 '}';
     }
 }

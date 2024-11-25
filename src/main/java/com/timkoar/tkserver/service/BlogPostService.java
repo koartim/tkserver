@@ -12,14 +12,19 @@ import java.util.Optional;
 
 @Service
 public class BlogPostService {
+
     private final BlogPostRepository blogPostRepository;
 
     public BlogPostService(BlogPostRepository blogPostRepository) {
         this.blogPostRepository = blogPostRepository;
     }
 
+    public BlogPost savePost(BlogPost blogPost) {
+        return blogPostRepository.save(blogPost);
+    }
+
     public List<BlogPost> getAllPosts() {
-        return blogPostRepository.findAllByOrderByCreatedDesc();
+        return blogPostRepository.findAll();
     }
 
     public BlogPost getPostById(Long id) {
@@ -27,7 +32,7 @@ public class BlogPostService {
                 .orElseThrow(() -> new IllegalArgumentException("Post with id: " + id + " not found"));
     }
 
-    public BlogPost savePost(BlogPost blogPost) {
-        return blogPostRepository.save(blogPost);
+    public void deletePost(Long postId) {
+        blogPostRepository.deleteById(postId);
     }
 }

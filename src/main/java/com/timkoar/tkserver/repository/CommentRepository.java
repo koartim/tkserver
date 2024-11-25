@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findByBlogPost_IdOrderByCreatedDateDesc(Long blogPostId);
+    List<Comment> findByPostId(Long postId);
 }

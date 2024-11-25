@@ -12,26 +12,28 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name="post_id", nullable = false)
-    private BlogPost blogPost;
+    @Column(nullable = false)
+    private Long postId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(nullable = false)
+    private Long userId;
 
     @Column(nullable = false, length = 500)
     private String content;
+
+    @Column(nullable = false)
+    private String username;
 
     private LocalDateTime createdDate = LocalDateTime.now();
 
     public Comment() {}
 
-    public Comment(Long id, BlogPost blogPost, User user, String content, LocalDateTime createdDate) {
+    public Comment(Long id, Long postId, Long userId, String content, String username, LocalDateTime createdDate) {
         this.id = id;
-        this.blogPost = blogPost;
-        this.user = user;
+        this.postId = postId;
+        this.userId = userId;
         this.content = content;
+        this.username = username;
         this.createdDate = createdDate;
     }
 
@@ -43,20 +45,20 @@ public class Comment {
         this.id = id;
     }
 
-    public BlogPost getBlogPost() {
-        return blogPost;
+    public Long getPostId() {
+        return postId;
     }
 
-    public void setBlogPost(BlogPost blogPost) {
-        this.blogPost = blogPost;
+    public void setPostId(Long postId) {
+        this.postId = postId;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getContent() {
@@ -65,6 +67,14 @@ public class Comment {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public LocalDateTime getCreatedDate() {
@@ -79,8 +89,8 @@ public class Comment {
     public String toString() {
         return "Comment{" +
                 "id=" + id +
-                ", blogPost=" + blogPost +
-                ", user=" + user +
+                ", postId=" + postId +
+                ", userId=" + userId +
                 ", content='" + content + '\'' +
                 ", createdDate=" + createdDate +
                 '}';

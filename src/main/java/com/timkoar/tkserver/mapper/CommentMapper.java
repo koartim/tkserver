@@ -1,10 +1,7 @@
 package com.timkoar.tkserver.mapper;
 
-import com.timkoar.tkserver.dto.CommentRequest;
-import com.timkoar.tkserver.model.blog.BlogPost;
+import com.timkoar.tkserver.dto.CommentDTO;
 import com.timkoar.tkserver.model.blog.comment.Comment;
-import com.timkoar.tkserver.model.user.User;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -12,32 +9,24 @@ public class CommentMapper {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    // convert comment entity to comment dto
-
-    public static CommentRequest toDTO(Comment comment) {
-        CommentRequest commentRequest = new CommentRequest();
-        commentRequest.setId(comment.getId());
-        commentRequest.setContent(comment.getContent());
-        commentRequest.setCreatedDate(comment.getCreatedDate().format(formatter));
-        commentRequest.setUserId(comment.getUser().getId());
-        commentRequest.setUsername(comment.getUser().getUsername());
-        return commentRequest;
+    public static CommentDTO toDTO(Comment comment) {
+        CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setId(comment.getId());
+        commentDTO.setContent(comment.getContent());
+        commentDTO.setPostId(comment.getPostId());
+        commentDTO.setUserId(comment.getUserId());
+        commentDTO.setUsername(comment.getUsername());
+        commentDTO.setCreatedDate(comment.getCreatedDate().format(formatter));
+        return commentDTO;
     }
 
-    public static Comment toEntity(CommentRequest commentRequest, BlogPost blogPost, User user) {
-
-        if (blogPost == null) {
-            throw new IllegalArgumentException("BlogPost cannot be null");
-        }
-        if (user == null) {
-            throw new IllegalArgumentException("User cannot be null");
-        }
+    public static Comment toEntity(CommentDTO commentDTO) {
         Comment comment = new Comment();
-        comment.setId(commentRequest.getId());
-        comment.setContent(commentRequest.getContent());
+        comment.setContent(commentDTO.getContent());
+        comment.setPostId(commentDTO.getPostId());
+        comment.setUserId(commentDTO.getUserId());
+        comment.setUsername(commentDTO.getUsername());
         comment.setCreatedDate(LocalDateTime.now());
-        comment.setBlogPost(blogPost);
-        comment.setUser(user);
         return comment;
     }
 }
